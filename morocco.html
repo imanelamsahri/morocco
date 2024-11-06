@@ -8,6 +8,7 @@
     <!-- Leaflet CSS and JS -->
     <link rel="stylesheet" href="leaflet.css" />
     <script src="leaflet.js"></script>
+    <script src="Morocco-Earthquake-Sept-2023.geojson"></script> 
 
     <style>
         body, html { height: 100%; margin: 0; font-family: Arial, sans-serif; }
@@ -28,13 +29,7 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Add Maxar satellite imagery tile layer
-    L.tileLayer('https://tile-server-url/{z}/{x}/{y}.png', { // Replace with actual Maxar URL
-        maxZoom: 19,
-        attribution: '&copy; Maxar Technologies'
-    }).addTo(map);
-
-    // GeoJSON data representing earthquake locations
+    // Inline GeoJSON data
     const earthquakeData = {
         "type": "FeatureCollection",
         "features": [
@@ -63,16 +58,19 @@
         ]
     };
 
-    // Add GeoJSON layer for earthquake points
-    L.geoJSON(earthquakeData, {
+    // Add the GeoJSON data as a layer on the map
+    const geojsonLayer = L.geoJSON(m, {
+        style: { color: "#ff7800", weight: 1 },
         onEachFeature: function (feature, layer) {
             layer.bindPopup(
                 `<b>Footprint ID:</b> ${feature.properties.id || 'N/A'}<br>` +
                 `<b>Date:</b> ${feature.properties.datetime || 'N/A'}`
             );
         }
-    }).addTo(map);
+    });
+    geojsonLayer.addTo(map);
 </script>
 
 </body>
 </html>
+
