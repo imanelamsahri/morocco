@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morocco Earthquake - September 2023</title>
+
+    <!-- Leaflet CSS and JS -->
+    <link rel="stylesheet" href="leaflet.css" />
+    <script src="leaflet.js"></script>
+
+    <style>
+        body, html { height: 100%; margin: 0; font-family: Arial, sans-serif; }
+        #map { width: 100%; height: 100vh; }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+    // Initialize the map centered on Morocco
+    const map = L.map('map').setView([31.5, -7.5], 8);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Add Maxar satellite imagery tile layer
+    L.tileLayer('https://tile-server-url/{z}/{x}/{y}.png', { // Replace with actual Maxar URL
+        maxZoom: 19,
+        attribution: '&copy; Maxar Technologies'
+    }).addTo(map);
+
+    // GeoJSON data representing earthquake locations
+    const earthquakeData = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [ -7.5, 31.5 ]
+                },
+                "properties": {
+                    "id": "1",
+                    "datetime": "2023-09-01T00:00:00Z"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [ -7.6, 31.6 ]
+                },
+                "properties": {
+                    "id": "2",
+                    "datetime": "2023-09-02T00:00:00Z"
+                }
+            }
+        ]
+    };
+
+    // Add GeoJSON layer for earthquake points
+    L.geoJSON(earthquakeData, {
+        onEachFeature: function (feature, layer) {
+            layer.bindPopup(
+                `<b>Footprint ID:</b> ${feature.properties.id || 'N/A'}<br>` +
+                `<b>Date:</b> ${feature.properties.datetime || 'N/A'}`
+            );
+        }
+    }).addTo(map);
+</script>
+
+</body>
+</html>
